@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/logoo.png";
 
 export default function Signup() {
@@ -11,7 +11,7 @@ export default function Signup() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-
+  const navigate = useNavigate(); 
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -49,12 +49,13 @@ export default function Signup() {
       const data = await res.json();
       console.log("Signup successful:", data);
       setSuccess(true);
+      navigate('/sing-in');
     } catch (err) {
       console.error(err);
+      
       setError(err.message);
     }
   };
-
   return (
     <div className="flex flex-col md:flex-row h-screen">
       {/* Left Side: Image */}
