@@ -6,4 +6,4 @@ function Singnin() {
   )
 }
 
-export default Singnin
+export default Singnin;

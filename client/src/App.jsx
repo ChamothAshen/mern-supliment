@@ -8,12 +8,17 @@ import About from './pages/About';
 import Heder from './component/Heder';
 
 export default function App() {
-  return   <BrowserRouter>
+  return  <BrowserRouter
+  future={{
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  }}
+>
       <Heder/>
        <Routes>
        <Route path='/' element={<Home />} />
        <Route path='/sing-in' element={<Singnin />} />
-       <Route path='/sing-UP' element={<SignUp />} />
+       <Route path='/sing-up' element={<SignUp />} />
        <Route path='/profile' element={<Profile />} />
        <Route path='/About' element={<About />} />
        </Routes>
