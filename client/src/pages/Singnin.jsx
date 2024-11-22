@@ -2,25 +2,32 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/logoo.png";
 import background from "../assets/back.jpg";
-
+import { useDispatch,useSelector  } from 'react-redux';
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '../redux/user/userSlice';
 function Signin() {   
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
+  
     try {
+      dispatch(signInStart());
+  
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -28,30 +35,29 @@ function Signin() {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await res.json();
-
-      // Debugging: log the response from the backend
+  
+      // Log the response from the backend for debugging
       console.log('Response Data:', data);
-
+  
+      // Check for response status or error from the backend
       if (res.status !== 200) {
-        setLoading(false);
-        setError(data.message || 'Login failed');
-        return;
+        dispatch(signInFailure(data.message || 'Invalid credentials.'));
+        return; // Exit early if login fails
       }
-
-      // Store the token or user data in localStorage
+  
+      // Store the token in localStorage if login is successful
       if (data.token) {
         localStorage.setItem('authToken', data.token);
       }
-
-      setLoading(false);
+  
+      dispatch(signInSuccess(data));
       alert("Login successful! Welcome to SuperFit");
-      console.log("Login successful! Welcome to SuperFit")
       navigate('/Home');
     } catch (error) {
-      setLoading(false);
-      setError(error.message || 'An error occurred');
+      // Catch any unexpected errors and dispatch failure
+      dispatch(signInFailure(error.message || 'An unexpected error occurred.'));
     }
   };
 
@@ -120,7 +126,7 @@ function Signin() {
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-600">
                 New to SuperFit?{' '}
-                <Link to="/sign-up" className="text-blue-700 hover:text-blue-800">
+                <Link to="/sing-up" className="text-blue-700 hover:text-blue-800">
                   Sign up
                 </Link>
               </p>

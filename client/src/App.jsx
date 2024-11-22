@@ -16,8 +16,8 @@ export default function App() {
 >
       <Heder/>
        <Routes>
-       <Route path='/' element={<Home />} />
-       <Route path='/sing-in' element={<Singnin />} />
+       <Route path='/Home' element={<Home />} />
+       <Route path='/singn-in' element={<Singnin />} />
        <Route path='/sing-up' element={<SignUp />} />
        <Route path='/profile' element={<Profile />} />
        <Route path='/About' element={<About />} />
