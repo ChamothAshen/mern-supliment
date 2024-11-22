@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../assets/logoo.png";
 import background from "../assets/back.jpg";
+import OAuth from '../component/OAuth';
 import { useDispatch,useSelector  } from 'react-redux';
 import {
   signInStart,
   signInSuccess,
   signInFailure,
 } from '../redux/user/userSlice';
+
 function Signin() {   
   const [formData, setFormData] = useState({});
   
@@ -20,7 +22,7 @@ function Signin() {
       [e.target.name]: e.target.value,
     });
   };
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -131,6 +133,7 @@ function Signin() {
                 </Link>
               </p>
             </div>
+             <OAuth/>
           </form>
           {error && <p className="text-red-500 mt-5">{error}</p>}
         </div>
