@@ -53,7 +53,7 @@ export const signup = async (req, res, next) => {
             Math.random().toString(36).slice(-4),
           email: req.body.email,
           password: hashedPassword,
-          avatar: req.body.photo,
+          avatar: req.body.photo 
         });
         await newUser.save();
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
