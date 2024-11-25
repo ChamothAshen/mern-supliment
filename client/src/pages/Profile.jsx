@@ -8,10 +8,18 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage';
  import { useDispatch } from 'react-redux';
- import {updateUserStart,updateUserSuccess,updateUserFailure} from '../redux/user/userSlice';
+ import {updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signOutUserStart,
+
+ } from '../redux/user/userSlice';
  
 export default function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser,loading ,error } = useSelector((state) => state.user);
   const fileRef = useRef(null); // Fixed variable name consistency
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
@@ -77,6 +85,36 @@ export default function Profile() {
         setUpdateSuccess(true);
       } catch (error) {
         dispatch(updateUserFailure(error.message));
+      }
+    };
+    const handleDeleteUser = async () => {
+      try {
+        dispatch(deleteUserStart());
+        const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+          method: 'DELETE',
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          dispatch(deleteUserFailure(data.message));
+          return;
+        }
+        dispatch(deleteUserSuccess(data));
+      } catch (error) {
+        dispatch(deleteUserFailure(error.message));
+      }
+    };
+    const handleSignOut = async () => {
+      try {
+        dispatch(signOutUserStart());
+        const res = await fetch('/api/auth/signout');
+        const data = await res.json();
+        if (data.success === false) {
+          dispatch(deleteUserFailure(data.message));
+          return;
+        }
+        dispatch(deleteUserSuccess(data));
+      } catch (error) {
+        dispatch(deleteUserFailure(data.message));
       }
     };
 
@@ -189,20 +227,26 @@ export default function Profile() {
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
-
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
           >
-            Save Changes
+               {loading ? 'Loading...' : ' Save Changes'}
+           
           </button>
         </form>
 
         <div className="flex justify-between mt-5">
-          <span className="text-red-700 cursor-pointer">Delete account</span>
-          <span className="text-red-700 cursor-pointer">Sign out</span>
+          <span  onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete account</span>
+          <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign out</span>
         </div>
+        <p className='text-red-700 mt-5'>{error ? error : ''}</p>
+       <p className='text-green-700 mt-5'>
+        {updateSuccess ? 'User is updated successfully!' : ''}
+      </p>
       </main>
+      
     </div>
   );
 }
