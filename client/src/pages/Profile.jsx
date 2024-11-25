@@ -7,17 +7,19 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
-
+ import { useDispatch } from 'react-redux';
+ import {updateUserStart,updateUserSuccess,updateUserFailure} from '../redux/user/userSlice';
+ 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const fileRef = useRef(null); // Fixed variable name consistency
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const[formData,setFormData]= useState({});
-  console.log(file); // Fixed 'files' reference to 'file'
-
-  // Handle file upload when a file is selected
+  const dispatch = useDispatch();
+  console.log(updateSuccess);
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -50,6 +52,33 @@ export default function Profile() {
       }
     );
   };
+     const handleChange = (e) =>{
+      setFormData({ ...formData, [e.target.id]: e.target.value });  
+
+    };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        dispatch(updateUserStart());
+        const res = await fetch(`/api/user/update/${currentUser._id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if (data.success === false) {
+          dispatch(updateUserFailure(data.message));
+          return;
+        }
+  
+        dispatch(updateUserSuccess(data));
+        setUpdateSuccess(true);
+      } catch (error) {
+        dispatch(updateUserFailure(error.message));
+      }
+    };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -76,7 +105,7 @@ export default function Profile() {
           <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-purple-600">
             <img
               onClick={() => fileRef.current.click()}
-              src={formData.avatar || currentUser.avatar} // Fallback to default avatar
+              src={formData?.avatar || currentUser.avatar} // Fallback to default avatar
               alt="Profile"
               className="w-full h-full object-cover"
             /> 
@@ -118,14 +147,16 @@ export default function Profile() {
         </div>
 
         {/* Input Fields */}
-        <form className="space-y-6 max-w-md">
+        <form onSubmit={handleSubmit} className="space-y-6 max-w-md">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
               Username
             </label>
             <input
               type="text"
+              defaultValue={currentUser.username}
               id="username"
+              onChange={handleChange}
               placeholder="Your username"
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
@@ -137,7 +168,9 @@ export default function Profile() {
             </label>
             <input
               type="email"
+              defaultValue={currentUser.email}
               id="email"
+              onChange={handleChange}
               placeholder="Your email"
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
@@ -149,7 +182,9 @@ export default function Profile() {
             </label>
             <input
               type="password"
-              id="password"
+              defaultValue={currentUser.password}
+              id="password" 
+              onChange={handleChange} //onchange is nessasary in this error 
               placeholder="Your password"
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
