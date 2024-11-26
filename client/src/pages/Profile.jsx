@@ -15,8 +15,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   signOutUserStart,
-
  } from '../redux/user/userSlice';
+ import {Link} from 'react-router-dom';
+
  
 export default function Profile() {
   const { currentUser,loading ,error } = useSelector((state) => state.user);
@@ -235,6 +236,12 @@ export default function Profile() {
                {loading ? 'Loading...' : ' Save Changes'}
            
           </button>
+           <Link
+              className="block w-full text-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              to={'/create-listing'}
+            >
+              Create Listing
+            </Link>
         </form>
 
         <div className="flex justify-between mt-5">

@@ -5,10 +5,9 @@ import userRouter from './routes/user.route.js'
 import authRouter  from './routes/auth.route.js'
 import cookieParser from 'cookie-parser';
 import listingRouter from './routes/listing.route.js'
-dotenv.config();
-
-mongoose.connect(process.env.MONGO)
-  .then(() => {
+ dotenv.config();
+  mongoose.connect(process.env.MONGO)
+   .then(() => {
     console.log('Connected to MongoDB!');
   })
   .catch((err) => {
