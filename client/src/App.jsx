@@ -24,10 +24,10 @@ export default function App() {
        <Route path='/singn-in' element={<Singnin />} />
        <Route path='/sing-up' element={<SignUp />} />
        <Route path='/listing/:listingId' element={<Listing />} />
-       <Route path='/ShowListings/:listingId' element={<ShowListings/>} />
        <Route element={<PrivateRoute />}>
        <Route path='/profile' element={<Profile />} />
        <Route path='/create-listing' element={<CreateListing />} />
+       <Route path='/ShowListings/:listingId' element={<ShowListings/>} />
        </Route>
        <Route path='/About' element={<About />} />
        </Routes>

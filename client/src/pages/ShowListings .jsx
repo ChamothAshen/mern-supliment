@@ -7,7 +7,7 @@ export default function ShowListings() {
   const [listings, setListings] = useState(location.state?.listings || []);
   const [loading, setLoading] = useState(!location.state?.listings);
   const [error, setError] = useState(false);
-
+ 
   useEffect(() => {
     if (!location.state?.listings) {
       // Fetch listings if not provided via state
@@ -32,6 +32,29 @@ export default function ShowListings() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error fetching listings.Please try again later.</p>;
 
+  const handleListingDelete = async (listingId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this listing?");
+    if (!confirmDelete) return;
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.error("Error:", data.message);
+        alert(`Error: ${data.message}`);
+        return;
+      }
+      // Update frontend state to remove the deleted listing
+      setListings((prevListings) =>
+        prevListings.filter((listing) => listing._id !== listingId)
+      );
+      alert("Listing deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting listing:", error.message);
+      alert("Failed to delete the listing. Please try again.");
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-7xl mx-auto">
@@ -53,13 +76,13 @@ export default function ShowListings() {
              {/* Buttons */}
                 <div className="flex justify-between mt-4">
                     <button
-                    onClick={() => handleUpdate(listing)}
+                   // onClick={() => handleUpdate(listing)}
                     className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
                     >
                     Update
                     </button>
                     <button
-                    onClick={() => handleDelete(listing._id)}
+                    onClick={() => handleListingDelete(listing._id)}
                     className="bg-green-700 text-white px-4 py-2 rounded hover:bg-red-600 transition"
                     >
                     Delete
