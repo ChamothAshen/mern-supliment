@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { app } from '../firebase'; // Ensure you have Firebase initialized in this file
+import { useNavigate } from 'react-router-dom';
 import {
   getDownloadURL,
   getStorage,
@@ -26,8 +27,10 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showListingsError, setShowListingsError] = useState(false);
   const[formData,setFormData]= useState({});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   console.log(updateSuccess);
   useEffect(() => {
     if (file) {
@@ -40,7 +43,7 @@ export default function Profile() {
     const fileName = `${new Date().getTime()}_${file.name}`;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
+   
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -119,6 +122,23 @@ export default function Profile() {
       }
     };
 
+    const handleShowListings = async () => {
+      try {
+        const res = await fetch(`/api/user/listings/${currentUser._id}`);
+        const data = await res.json();
+    
+        if (data.success === false) {
+          console.error("Error fetching listings");
+          return;
+        }
+    
+        // Pass the listings data using navigate
+        navigate(`/ShowListings/${currentUser._id}`, { state: { listings: data } });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+    
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
@@ -126,9 +146,12 @@ export default function Profile() {
         <h2 className="text-xl font-semibold text-gray-800 mb-6">Settings</h2>
         <ul className="space-y-4">
           <li className="text-purple-600 font-medium cursor-pointer">Public Profile</li>
-          <li className="text-gray-600 cursor-pointer hover:text-purple-600">
-            Account Settings
-          </li>
+            <button onClick ={handleShowListings}className='className="text-gray-600 cursor-pointer hover:text-purple-600"'>  
+               ShowListings   
+           </button>
+           <p className='text-red-700 mt-5'>
+            {showListingsError ? 'Error showing listings' : ''}
+            </p>
           <li className="text-gray-600 cursor-pointer hover:text-purple-600">
             Notifications
           </li>
