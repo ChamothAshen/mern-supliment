@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 export default function ShowListings() {
   const location = useLocation();
@@ -75,12 +75,12 @@ export default function ShowListings() {
                 </div>
              {/* Buttons */}
                 <div className="flex justify-between mt-4">
-                    <button
-                   // onClick={() => handleUpdate(listing)}
-                    className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                    >
+                   <Link to={`/update-listing/${listing._id}`}>
+                    <button 
+                    className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition" >
                     Update
                     </button>
+                   </Link>
                     <button
                     onClick={() => handleListingDelete(listing._id)}
                     className="bg-green-700 text-white px-4 py-2 rounded hover:bg-red-600 transition"
