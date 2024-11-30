@@ -11,6 +11,8 @@ import CreateListing from './pages/CreateListing';
 import Listing from './pages/Listing';
 import ShowListings from './pages/ShowListings ';
 import UpdateListing from './pages/UpdateListing';
+import Listingspages from './pages/Listingspage';
+
 export default function App() {
   return  <BrowserRouter
   future={{
@@ -31,6 +33,7 @@ export default function App() {
        <Route path='/update-listing/:listingId' element={<UpdateListing />}   />
        </Route>
        <Route path='/About' element={<About />} />
+       <Route path='/Listings' element={<Listingspages/>} />
        </Routes>
    </BrowserRouter>
 }

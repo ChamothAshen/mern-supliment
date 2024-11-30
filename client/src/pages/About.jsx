@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-
+import ceo from '../assets/ceo2.jpg';
+import nextp from '../assets/ceo.jpg';
+import project from '../assets/project.jpg';
 export default function About() {
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -63,14 +65,14 @@ export default function About() {
                 transition={{ duration: 0.8 }}
               >
                 <img
-                  src="https://via.placeholder.com/150"
+                  src={ceo}
                   alt="Team Member 1"
                   className="rounded-full mx-auto mb-4"
                 />
                 <h3 className="text-xl font-bold text-gray-900">John Doe</h3>
                 <p className="text-gray-700">Founder & CEO</p>
                 <p className="text-gray-600 mt-4">
-                  John has been passionate about fitness and wellness for over a decade. He is committed to providing top-tier supplements to help people lead healthier lives.
+                John Doe has been passionate about fitness and wellness for over a decade. He is committed to providing top-tier supplements to help people lead healthier lives.
                 </p>
               </motion.div>
               {/* Team Member 2 */}
@@ -81,7 +83,7 @@ export default function About() {
                 transition={{ duration: 0.8 }}
               >
                 <img
-                  src="https://via.placeholder.com/150"
+                  src= {nextp}
                   alt="Team Member 2"
                   className="rounded-full mx-auto mb-4"
                 />
@@ -99,7 +101,7 @@ export default function About() {
                 transition={{ duration: 0.8 }}
               >
                 <img
-                  src="https://via.placeholder.com/150"
+                  src={project}
                   alt="Team Member 3"
                   className="rounded-full mx-auto mb-4"
                 />

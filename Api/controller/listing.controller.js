@@ -60,3 +60,57 @@ export const deleteListing = async (req, res, next) => {
           next(error);
         }
       };
+     export const getListings = async (req, res, next) => {
+        try {
+          // Parse query parameters
+          const limit = parseInt(req.query.limit) || 9; // Default to 9 listings per page
+          const startIndex = parseInt(req.query.startIndex) || 0; // Default to starting index 0
+          const searchTerm = req.query.searchTerm || ""; // Default to an empty search term
+      
+          // Filters based on query parameters
+          let offer = req.query.offer;
+          let available = req.query.available;
+      
+          // Handle `offer` and `available` values properly
+          offer = offer !== undefined ? offer === "true" : { $in: [true, false] };
+          available = available !== undefined ? available === "true" : { $in: [true, false] };
+      
+          // Other optional filters
+          const category = req.query.category;
+          const brand = req.query.brand;
+          const dosageForm = req.query.dosageForm;
+      
+          // Build the filter query
+          const filterQuery = {
+            name: { $regex: searchTerm, $options: "i" }, // Case-insensitive search
+            offer,
+            available,
+          };
+      
+          if (category) filterQuery.category = category;
+          if (brand) filterQuery.brand = brand;
+          if (dosageForm) filterQuery.dosageForm = dosageForm;
+      
+          // Fetch listings from the database
+          const listings = await Listing.find(filterQuery)
+            .sort({ createdAt: "desc" }) // Sort by newest first
+            .limit(limit) // Limit results
+            .skip(startIndex); // Skip results for pagination
+      
+          // Get total count of matching documents for pagination
+          const total = await Listing.countDocuments(filterQuery);
+      
+          // Return the listings and total count as the response
+          return res.status(200).json({
+            listings,
+            total,
+          });
+        } catch (error) {
+          console.error("Error fetching listings:", error);
+          return res.status(500).json({
+            message: "An error occurred while fetching listings.",
+            error: error.message,
+          });
+        }
+      };
+      

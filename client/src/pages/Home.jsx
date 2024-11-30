@@ -1,5 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import plastic  from "../assets/plastic-bottle-pills.jpg"
+import product1 from "../assets/product1.jpg"
+import project from '../assets/project.jpg';
 
 export default function Home() {
   return (
@@ -38,12 +42,14 @@ export default function Home() {
                 <p className="text-lg mb-8">
                   Explore our wide selection of premium-quality supplements to support your health and fitness goals.
                 </p>
+                <Link to="/listings">
                 <motion.button 
                   className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transform hover:scale-105 transition-all duration-300"
                   whileHover={{ scale: 1.1 }}  // Active hover effect
                 >
                   Shop Now
                 </motion.button>
+                </Link>
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, x: 50 }} 
@@ -51,7 +57,7 @@ export default function Home() {
                 transition={{ duration: 1, type: 'spring', stiffness: 100 }}
               >
                 <img
-                  src="https://via.placeholder.com/500x300"
+                  src={plastic}
                   alt="Supplement Store"
                   className="rounded-lg shadow-lg"
                 />
@@ -81,7 +87,7 @@ export default function Home() {
                 whileHover={{ scale: 1.05 }} // Hover zoom effect
               >
                 <img
-                  src="https://via.placeholder.com/300x200"
+                  src={product1}
                   alt="Product 1"
                   className="w-full h-48 object-cover"
                 />
@@ -129,17 +135,11 @@ export default function Home() {
                   "I've been using the supplements from the Supplement Store App and they've been a game-changer for my workout routine. Highly recommended!"
                 </p>
                 <div className="flex items-center">
-                  <img
-                    src="https://via.placeholder.com/40x40"
+                  <img 
+                   src={project}
                     alt="Customer 1"
                     className="rounded-full mr-4"
                   />
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-900">
-                      John Doe
-                    </h4>
-                    <p className="text-gray-700">Fitness Enthusiast</p>
-                  </div>
                 </div>
               </motion.div>
               {/* Add more testimonial cards */}
@@ -147,7 +147,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
       <footer className="bg-gray-800 text-white py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center">
