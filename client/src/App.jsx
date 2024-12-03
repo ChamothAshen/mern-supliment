@@ -19,10 +19,11 @@ export default function App() {
     v7_startTransition: true,
     v7_relativeSplatPath: true,
   }}
->
-      <Heder/>
+>    
+      <Heder/>   
        <Routes>
-       <Route path='/' element={<Home />} />
+       <Route path='/' element={<Home />} />  
+       <Route path='/Home' element={<Home />} />
        <Route path='/singn-in' element={<Singnin />} />
        <Route path='/sing-up' element={<SignUp />} />
        <Route path='/listing/:listingId' element={<Listing />} />

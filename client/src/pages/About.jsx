@@ -4,6 +4,8 @@ import ceo from '../assets/ceo2.jpg';
 import nextp from '../assets/ceo.jpg';
 import project from '../assets/project.jpg';
 export default function About() {
+
+  console.log(ceo);
   return (
     <div className="bg-gray-50 min-h-screen">
       <header className="bg-white shadow-lg">
