@@ -22,7 +22,7 @@ export default function App() {
 >
       <Heder/>
        <Routes>
-       <Route path='/Home' element={<Home />} />
+       <Route path='/' element={<Home />} />
        <Route path='/singn-in' element={<Singnin />} />
        <Route path='/sing-up' element={<SignUp />} />
        <Route path='/listing/:listingId' element={<Listing />} />
